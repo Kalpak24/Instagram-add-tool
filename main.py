@@ -13,7 +13,8 @@ def main():
         browser = p.chromium.launch_persistent_context(
             user_data_dir=user_data_dir,
             headless=False,
-            viewport={"width": 1280, "height": 800}
+            viewport={"width": 1280, "height": 800},
+            args=["--disable-blink-features=AutomationControlled"]
         )
         
         # When persistent context is launched, it usually opens one blank page.
@@ -47,7 +48,10 @@ def main():
         page.add_init_script(js_code)
         
         print("Opening Instagram...")
-        page.goto("https://www.instagram.com/")
+        try:
+            page.goto("https://www.instagram.com/", wait_until="domcontentloaded", timeout=60000)
+        except Exception as e:
+            print(f"Note: Page load timeout, but script will continue: {e}")
         
         # Also evaluate it on the current page immediately
         try:

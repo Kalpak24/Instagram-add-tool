@@ -1,4 +1,6 @@
 @echo off
+echo Cleaning up old browser sessions...
+powershell -Command "Get-Process | Where-Object {$_.Path -like '*ms-playwright*'} | Stop-Process -Force -ErrorAction SilentlyContinue"
 echo Starting Instagram Ad Tool...
 python main.py
 pause
